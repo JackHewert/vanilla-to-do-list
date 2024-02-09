@@ -1,26 +1,12 @@
-import { getToDoData } from './lib/firebase/api';
-import { toDoItemTemplate } from './templates/toDoItem';
-/* 
-           1. Import Data 
-		   2. Working with Object of Objects 
-		      Object.values()
-			  Object.keys()
-			  Object.entries()
 
-		    3. Creating A Template Preline... Tailwind UI Libraries 
-
-			4. Creating A Render Function 
-
-			5 Updating the DOM.
-
-			Display Templating 
-			toDoItems.forEach((todo) => {
-		      document.querySelector('#root').insertAdjacentHTML('afterbegin', todo);
-	         });
-
-			  
-*/
-
+import { ref, get } from "firebase/database";
+import { db } from "./../../config/firebase/firebaseInit";
+async function getToDoData() {
+	const dbRef = ref(db, "/todos");
+	const dataSnapshot = await get(dbRef);
+	return await dataSnapshot.val();
+}
+export { getToDoData };
 async function appInit() {
 	const appData = await getToDoData();
 	// Interactive Templating
@@ -40,5 +26,11 @@ async function appInit() {
 	});
 	document.querySelector('main').append(markup);
 }
-
+import { getToDoData } from './lib/firebase/api';
+let store = [];
+async function appInit() {
+	const toDos = await getToDoData();
+	console.log(toDos);
+}
+appInit();
 appInit();
